@@ -18,26 +18,36 @@ import billet_router from "./routers/billet.router.js";
 
 //BDD
 import db from "./models/index.js";
-try {
-    await db.sequelize.authenticate()
-}catch (e) {
-    console.error(e);
-}
 //
 
-const port = process.env.PORT;
 const app = express();
+//analyser les requêtes de type application/json
 app.use(bodyParser.json());
+// analyser les requêtes de type application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({extended: true}));
 
 const swagger_options = {
     swaggerDefinition: {
         openapi : "3.0.0",
         info: {
-            title: "SAEG9 API Documentation",
-            description: "Realised By Group 9",
-            servers: [`http://localhost:${port}`],
+            title: "Projet WebServices",
+            description: "Realised by : VALENNE Nathan, IMALOUI Redha, DUBOL Lucas, BAHLOUL Elias",
+            servers: [`http://localhost:${process.env.PORT}`],
             version: "1.0"
-        }
+        },
+        components: {
+            securitySchemes: {
+                jwt: {
+                    type: "http",
+                    scheme: "bearer",
+                    in: "header",
+                    bearerFormat: "JWT",
+                },
+            }
+        },
+        security: [{
+            jwt: []
+        }],
     },
     apis: ["server.js", "./routers/*.js"]
 };
@@ -57,8 +67,10 @@ app.use("/stands", stand_router);
 app.use("/billets", billet_router);
 app.use("/api-docs", swagger_ui.serve, swagger_ui.setup(swaggerJsDoc(swagger_options)));
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}` );
-    db.sequelize.sync().then(r => console.log("yeah"));
+app.listen(process.env.PORT, () => {
+    console.log(`Listening on port ${process.env.PORT}` );
+    db.sequelize.sync().then(() =>
+        console.log("Database synchronized successfully")
+    );
 
 });
