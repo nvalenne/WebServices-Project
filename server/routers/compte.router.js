@@ -1,10 +1,10 @@
 import express from 'express';
 import {authentificate, createAccount, getAccountByID, refreshToken} from "../controllers/compte.controller.js";
 import {inscriptionValidation} from "../middlewares/inscription-validation.js";
+import passport from "passport";
+
 
 let compte_router = express.Router();
-
-compte_router.get("/:id", getAccountByID)
 
 /**
  * @swagger
@@ -123,4 +123,13 @@ compte_router.post("/inscription", inscriptionValidation, createAccount);
  *              description: Bad request
  */
 compte_router.post("/refreshtoken", refreshToken);
+
+compte_router.get('/google', passport.authenticate('google',{
+    scope: ['profile']
+}))
+compte_router.get("/:id", getAccountByID)
+
+compte_router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
+    res.send('You reached the callback URL')
+})
 export default compte_router;

@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import db from "../models/index.js";
 import jwt from "jsonwebtoken";
 import {config} from "../config/auth.config.js";
+
 const Compte = db.compte;
 const RefreshToken = db.refreshToken;
 

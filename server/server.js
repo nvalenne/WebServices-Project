@@ -20,6 +20,7 @@ import billet_router from "./routers/billet.router.js";
 import db from "./models/index.js";
 //
 
+const passportSetup = import('./config/passport.config.js')
 const app = express();
 //analyser les requêtes de type application/json
 app.use(bodyParser.json());
