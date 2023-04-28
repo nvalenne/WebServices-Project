@@ -130,6 +130,6 @@ compte_router.get('/google', passport.authenticate('google',{
 compte_router.get("/:id", getAccountByID)
 
 compte_router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-    res.send('You reached the callback URL')
+    res.redirect('/')
 })
 export default compte_router;

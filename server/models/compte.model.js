@@ -11,6 +11,14 @@ export const Compte = (sequelize) => {
                 },
                 primaryKey: true
             },
+            id_google: {
+                field: 'google_id',
+                type: DataType.CHAR,
+            },
+            profile_picture: {
+                field: 'profile_picture',
+                type: DataType.CHAR,
+            },
             username: {
                 field: 'identifiant',
                 type: DataType.CHAR(50),

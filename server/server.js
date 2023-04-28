@@ -18,6 +18,7 @@ import billet_router from "./routers/billet.router.js";
 
 //BDD
 import db from "./models/index.js";
+import session from "express-session";
 //
 
 const passportSetup = import('./config/passport.config.js')
@@ -60,6 +61,18 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
+app.use(
+    session({
+        secret: process.env.COOKIE_SECRET,
+        cookie: {
+            secure: process.env.NODE_ENV === "production" ? "true" : "auto",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        },
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+
 app.use("/formulaires", formulaire_router);
 app.use("/account", compte_router);
 app.use("/prestataires", prestataire_router);
@@ -68,6 +81,9 @@ app.use("/stands", stand_router);
 app.use("/billets", billet_router);
 app.use("/api-docs", swagger_ui.serve, swagger_ui.setup(swaggerJsDoc(swagger_options)));
 
+app.get('/', (req, res) => {
+    res.send(req.session)
+})
 app.listen(process.env.PORT, () => {
     console.log(`Listening on port ${process.env.PORT}` );
     db.sequelize.sync().then(() =>
