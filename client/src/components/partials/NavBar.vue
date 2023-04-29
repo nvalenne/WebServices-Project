@@ -87,6 +87,7 @@ export default {
     logout(){
       this.$cookie.delete('userAuthentificated');
       this.setUserConnected('')
+      this.$router.push('/')
     }
   }
 };

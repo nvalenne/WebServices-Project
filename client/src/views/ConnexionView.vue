@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="connexion">
-      <div style="width:40%">
+      <div style="width:50%">
         <v-alert
             type="error"
             dense
@@ -10,24 +10,35 @@
           {{error}}
         </v-alert>
         <v-card elevation="4" class="cardConnexion">
-          <div class="headerConnexion" style="margin-bottom: 15px;">
-            <img src="../assets/wheel.gif" style="width: 20%">
-          </div>
-          <div>
-            <div id="formConnexion" >
-              <label for="username">Nom d'utilisateur</label>
-              <v-text-field type="text" id="username" v-model="form.username" required></v-text-field>
-              <label for="password">Mot de passe</label>
-              <v-text-field type="password" id="password" v-model="form.password" required></v-text-field>
-              <v-btn color="success" @click="submitForm">Se connecter</v-btn>
+          <v-col cols="7">
+            <div class="headerConnexion" style="margin-bottom: 15px;">
+              <h2 class="mb-4">Connexion</h2>
+              <img src="../assets/wheel.gif" style="width: 20%">
             </div>
-            <div class="signup-buttons">
-              <a href="#" class="google-signup" @click.prevent="loginWithGoogle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><title>Google</title><g fill="none" fill-rule="evenodd"><path fill="#4285F4" d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4814h4.8436c-.2086 1.125-.8427 2.0782-1.7959 2.7164v2.2581h2.9087c1.7018-1.5668 2.6836-3.874 2.6836-6.615z"></path><path fill="#34A853" d="M9 18c2.43 0 4.4673-.806 5.9564-2.1805l-2.9087-2.2581c-.8059.54-1.8368.859-3.0477.859-2.344 0-4.3282-1.5831-5.036-3.7104H.9574v2.3318C2.4382 15.9832 5.4818 18 9 18z"></path><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.2822-1.1168-.2822-1.71s.1023-1.17.2823-1.71V4.9582H.9573A8.9965 8.9965 0 0 0 0 9c0 1.4523.3477 2.8268.9573 4.0418L3.964 10.71z"></path><path fill="#EA4335" d="M9 3.5795c1.3214 0 2.5077.4541 3.4405 1.346l2.5813-2.5814C13.4632.8918 11.426 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582L3.964 7.29C4.6718 5.1627 6.6559 3.5795 9 3.5795z"></path></g></svg>
-                Google
-              </a>
+            <div>
+              <div id="formConnexion" >
+                <label for="username">Nom d'utilisateur</label>
+                <v-text-field type="text" id="username" v-model="form.username" required></v-text-field>
+                <label for="password">Mot de passe</label>
+                <v-text-field type="password" id="password" v-model="form.password" required></v-text-field>
+                <v-btn color="success" @submit="submitForm">Se connecter</v-btn>
+              </div>
             </div>
-          </div>
+          </v-col>
+          <v-divider vertical></v-divider>
+          <v-col cols="5">
+            <h4>Vous souhaitez vous connecter avec un de ces services ?</h4>
+            <div style="padding: 30px">
+              <div class="mt-6 google-signin-button">
+                <v-icon color="white">mdi-google</v-icon>
+                <button v-google-signin-button="clientId">Continue with Google</button>
+              </div>
+              <div class="mt-6 github-signin-button">
+                <v-icon color="white">mdi-github</v-icon>
+                <button>Continue with GitHub</button>
+              </div>
+            </div>
+          </v-col>
         </v-card>
       </div>
       <div>
@@ -51,6 +62,7 @@ export default {
   },
   data(){
     return {
+      clientId: '50469353179-qtgc2htu7eb0ol7hqfc0536gskbmd01o.apps.googleusercontent.com',
       form: {
         username: '',
         password: ''
@@ -73,10 +85,12 @@ export default {
             //console.log(error)
           })
 
-    }
+    },
   },
-  computed:{
-
+  mounted() {
+    let scriptOAuth = document.createElement('script')
+    scriptOAuth.setAttribute('src', 'https://apis.google.com/js/platform.js')
+    document.head.appendChild(scriptOAuth)
   }
 }
 
@@ -95,7 +109,40 @@ export default {
 }
 
 .cardConnexion {
+  display: flex;
+  flex-direction: row;
   border-radius: 40px;
   padding: 10px 0 20px 0;
+}
+.google-signin-button {
+  font-weight: bold;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  gap: 10px;
+  flex-flow: wrap row;
+  color: white;
+  text-align:center;
+  background-color: #d71616;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 10px;
+  padding: 0 15px
+}
+
+.github-signin-button {
+  font-weight: bold;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  gap: 10px;
+  flex-flow: wrap row;
+  color: white;
+  text-align:center;
+  background-color: #181717;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 10px;
+  padding: 0 15px
 }
 </style>
