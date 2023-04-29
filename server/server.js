@@ -6,6 +6,8 @@ import swaggerJsDoc from "swagger-jsdoc"
 import cors from "cors";
 import session from 'express-session';
 import cookieParser from "cookie-parser";
+import {connexionValidation} from "./middlewares/connexion-validation.js";
+
 dotenv.config();
 
 // Routers
@@ -15,6 +17,7 @@ import attraction_router from "./routers/attraction.router.js";
 import compte_router from "./routers/compte.router.js";
 import stand_router from "./routers/stand.router.js";
 import billet_router from "./routers/billet.router.js";
+import auth_router from "./routers/auth.router.js";
 //
 
 
@@ -89,7 +92,16 @@ app.use("/prestataires", prestataire_router);
 app.use("/attractions", attraction_router);
 app.use("/stands", stand_router);
 app.use("/billets", billet_router);
+app.use("/auth", auth_router)
 app.use("/api-docs", swagger_ui.serve, swagger_ui.setup(swaggerJsDoc(swagger_options)));
+
+app.get('/', connexionValidation, (req, res) => {
+    res.send(`Hello world ${req.user.username}`)
+})
+app.get('/logout', (req, res) => {
+    req.session = null;
+    res.redirect('/');
+})
 
 app.listen(process.env.PORT, () => {
     console.log(`Listening on port ${process.env.PORT}` );

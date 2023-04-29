@@ -37,6 +37,7 @@ CREATE TABLE compte(
    id_compte SERIAL,
    identifiant VARCHAR(255),
    google_id VARCHAR UNIQUE,
+   github_id INT UNIQUE,
    profile_picture VARCHAR(255),
    mdp VARCHAR(255),
    mail VARCHAR(50),

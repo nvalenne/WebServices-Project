@@ -15,6 +15,10 @@ export const Compte = (sequelize) => {
                 field: 'google_id',
                 type: DataType.CHAR,
             },
+            id_github: {
+                field: 'github_id',
+                type: DataType.INTEGER,
+            },
             profile_picture: {
                 field: 'profile_picture',
                 type: DataType.CHAR,
