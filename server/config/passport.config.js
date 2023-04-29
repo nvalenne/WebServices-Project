@@ -5,7 +5,27 @@ dotenv.config();
 
 import GoogleStrategy from "passport-google-oauth2";
 import db from "../models/index.js";
-import {addAccountInDB} from "../services/compte.service.js";
+import PassportLocal from "passport-local";
+import bcrypt from "bcrypt";
+
+passport.use(new PassportLocal.Strategy({
+    usernameField: 'username',
+}, async (username, password, done) => {
+    try {
+        const user = await db.compte.findOne({
+            where: {
+                username: username
+            }
+        })
+        if (user && bcrypt.compareSync(password, user.password)){
+            done(null, user)
+        } else {
+            done(null, false) // Mot de passe invalide
+        }
+    } catch (error) {
+        done(error)
+    }
+}))
 
 passport.use(new GoogleStrategy({
         // options for the strategy
@@ -14,7 +34,6 @@ passport.use(new GoogleStrategy({
         clientSecret: process.env.CLIENT_SECRET_GOOGLE
 
     }, async (accessToken, refreshToken, profile, done) => {
-        // console.log(profile)
         let user = {}
         const account = profile._json
         try {

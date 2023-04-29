@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import swagger_ui from "swagger-ui-express"
 import swaggerJsDoc from "swagger-jsdoc"
 import cors from "cors";
+import session from 'express-session';
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 // Routers
@@ -18,11 +20,13 @@ import billet_router from "./routers/billet.router.js";
 
 //BDD
 import db from "./models/index.js";
-import session from "express-session";
+import passport from "passport";
 //
 
-const passportSetup = import('./config/passport.config.js')
 const app = express();
+app.use(cookieParser())
+
+
 //analyser les requêtes de type application/json
 app.use(bodyParser.json());
 // analyser les requêtes de type application/x-www-form-urlencoded
@@ -55,11 +59,12 @@ const swagger_options = {
 };
 
 const corsOptions = {
-    origin: '*',
+    origin: 'http://localhost:8080',
     credentials: true,
     optionSuccessStatus: 200
 }
 app.use(cors(corsOptions))
+const passportSetup = import('./config/passport.config.js')
 
 app.use(
     session({
@@ -67,11 +72,16 @@ app.use(
         cookie: {
             secure: process.env.NODE_ENV === "production" ? "true" : "auto",
             sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 86400,
         },
         resave: false,
         saveUninitialized: false,
     })
 );
+
+// initialize passport
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use("/formulaires", formulaire_router);
 app.use("/account", compte_router);
@@ -81,9 +91,6 @@ app.use("/stands", stand_router);
 app.use("/billets", billet_router);
 app.use("/api-docs", swagger_ui.serve, swagger_ui.setup(swaggerJsDoc(swagger_options)));
 
-app.get('/', (req, res) => {
-    res.send(req.session)
-})
 app.listen(process.env.PORT, () => {
     console.log(`Listening on port ${process.env.PORT}` );
     db.sequelize.sync().then(() =>

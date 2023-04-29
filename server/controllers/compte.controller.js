@@ -43,6 +43,26 @@ export const getAccountByID = (req, res) => {
 }
 
 export const authentificate = (req, res) => {
+    try {
+        let token = jwt.sign({id: req.user.id, username: req.user.username, role: req.user.role}, config.secret, {
+            expiresIn: 86400 // 24 heures
+        });
+        res.status(200).send({
+            succes: 0,
+            data: {
+                id: req.user.id,
+                username: req.user.username,
+                nom: req.user.nom,
+                prenom: req.user.prenom,
+                role: req.user.role,
+                token: token,
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500)
+    }
+    /*
     Compte.findOne({
         where: {
             username: req.body.username
@@ -67,16 +87,23 @@ export const authentificate = (req, res) => {
                 expiresIn: 86400 // 24 heures
             });
             let refreshToken = await RefreshToken.createToken(user);
+            user.accesToken = token
+            user.refreshToken = refreshToken
             res.status(200).send({
-                id: user.id_compte,
-                username: user.username,
-                accessToken: token,
-                refreshToken: refreshToken,
+                succes: 0,
+                data: {
+                    username: user.username,
+                    prenom:  user.prenom,
+                    role: user.role,
+                    token: user.accesToken,
+                    refreshToken: user.refreshToken
+                },
             });
         })
         .catch(err => {
             res.status(500).send({message: err.message});
         });
+    */
 }
 
 export const refreshToken = async (req, res) => {

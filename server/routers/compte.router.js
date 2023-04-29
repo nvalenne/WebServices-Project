@@ -40,7 +40,7 @@ let compte_router = express.Router();
  *          '400':
  *              description: Bad request
  */
-compte_router.post("/connexion",authentificate)
+compte_router.post("/connexion", passport.authenticate('local'), authentificate)
 
 
 /**
