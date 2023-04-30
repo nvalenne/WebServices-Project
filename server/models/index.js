@@ -64,6 +64,9 @@ db.livre_or = Livre_Or(sequelize);
 import { refreshToken } from "./refreshToken.model.js"
 db.refreshToken = refreshToken(sequelize);
 
+import { Message } from "./message.model.js";
+db.messages = Message(sequelize);
+
 //
 // Relations
 //

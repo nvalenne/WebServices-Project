@@ -13,6 +13,12 @@ DROP TABLE IF EXISTS compte CASCADE;
 DROP TABLE IF EXISTS type_attraction CASCADE;
 DROP TABLE IF EXISTS type_stand CASCADE;
 DROP TABLE IF EXISTS emplacement CASCADE;
+DROP TABLE IF EXISTS messages CASCADE;
+
+CREATE TABLE messages(
+    username VARCHAR,
+    message VARCHAR
+);
 
 CREATE TABLE emplacement(
    id_emplacement SERIAL,

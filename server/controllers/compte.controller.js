@@ -37,7 +37,12 @@ export const getAccountByID = (req, res) => {
             console.error(err)
             res.status(400).send({success: 1, data: err});
         } else {
-            res.status(200).send({success: 0, data: result});
+            if (result.length){
+                res.status(200).send({success: 0, data: result});
+            } else {
+                res.sendStatus(204)
+            }
+
         }
     })
 }

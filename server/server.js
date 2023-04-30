@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import swagger_ui from "swagger-ui-express"
+import passport from "passport";
+import {Server} from "socket.io";
 import swaggerJsDoc from "swagger-jsdoc"
 import cors from "cors";
 import session from 'express-session';
@@ -23,9 +25,7 @@ import auth_router from "./routers/auth.router.js";
 
 //BDD
 import db from "./models/index.js";
-import passport from "passport";
 //
-
 const app = express();
 app.use(cookieParser())
 
@@ -62,7 +62,7 @@ const swagger_options = {
 };
 
 const corsOptions = {
-    origin: 'http://localhost:8080',
+    origin: '*',
     credentials: true,
     optionSuccessStatus: 200
 }
@@ -103,10 +103,33 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 })
 
-app.listen(process.env.PORT, () => {
+
+const server = app.listen(process.env.PORT, () => {
     console.log(`Listening on port ${process.env.PORT}` );
     db.sequelize.sync().then(() =>
         console.log("Database synchronized successfully")
     );
 
+});
+
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:8080',
+    }
+})
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+
+    socket.on('my message', (msg) => {
+        // console.log(msg)
+        db.messages.create({
+            username: msg.user,
+            message: msg.message,
+        }).then(() => {
+            io.emit('my broadcast', `${msg.user}: ${msg.message}`);
+        })
+    });
 });

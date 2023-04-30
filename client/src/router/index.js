@@ -79,7 +79,17 @@ const routes = [
     name: 'livre_d_or',
     component: () => import('@/views/LivreOrView'),
     meta: {
-      authRequired: false
+      authRequired: true,
+      rolePermission: ["utilisateur", "prestataire","admin"],
+    }
+  },
+  {
+    path: '/chat',
+    name: 'chat',
+    component: () => import ('@/views/ChatView'),
+    meta: {
+      authRequired: true,
+      rolePermission: ["utilisateur", "prestataire","admin"],
     }
   },
   {

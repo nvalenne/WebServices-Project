@@ -34,6 +34,10 @@
             <v-icon size="24" color="white">mdi-comment</v-icon>
             <span>Livre d'or</span>
           </router-link>
+          <router-link to="/chat" v-if="userConnected">
+            <v-icon color="white">mdi-chat</v-icon>
+            <span>Live Chat</span>
+          </router-link>
           <router-link to="/mes_billets" v-if="userConnected">
             <v-icon size="24" color="white">mdi-ticket</v-icon>
             <span>Mes billets</span>
@@ -115,7 +119,7 @@ nav text {
 nav a {
   font-weight: bold;
   font-family: Poppins, sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   color: #ffffff;
   margin: 0 30px 0 30px;
   text-decoration: none;
