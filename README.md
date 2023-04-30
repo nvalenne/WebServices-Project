@@ -24,6 +24,7 @@
 3. Installer toutes les dépendances du projet en faisant la commande `npm install` (Attention: à faire dans le dossier server ET client)
 4. Pensez à définir toutes les variables d'environnement dans un fichier `.env`
 5. Lancez le serveur grâce à la commande `npm start` et l'application Vue avec `npm run serve`
+Informations : Le ports que nous avons utilisé sont 3000 pour l'API et 8080 pour le projet Vue
 
 # Infos pratiques
 - **Les jeux de données sont présentes dans le fichier SQL (créationV2.sql)**
